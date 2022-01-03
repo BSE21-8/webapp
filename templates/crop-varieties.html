@@ -1,0 +1,12 @@
+{% extends 'layouts/recommend-base.html' %}
+{% set active_page = activeTab %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_content %}
+
+{% for crop in crops %}
+        {{ crop|e }}
+{% endfor %}
+
+{% endblock %}

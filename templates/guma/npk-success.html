@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Npk Recommendation</title>
+  </head>
+  <body>
+      <!-- nav-bar starts here  -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="container">
+  <a class="navbar-brand mb-0 h1" href="#">IdealCrop</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="me-auto"></div>
+    <ul class="navbar-nav mb-0 p-0 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Crop</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">NPK Ratio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Variates</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Fertilizers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Ideal Pratices</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="../static/images/letter.png" alt="" class="img-round" height="40px">
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+</nav>
+      <!-- navbar ends here -->
+        <div class="container">
+          <div class="row d-flex justify-content-center mt-2 p-2 py-2">
+            <h1 class="text-center h1 fs-1 fw-normal p-3">NPK Ratio Recommendation</h1>
+            <div class="col-5 mt-2 p-3">
+              <p class="text-center bg-success text-white p-2 wrap">
+                    Successful!
+                    <form class="row border form-row mb-2 mt-1">
+                      <h3 class="text-success text-center">Recommended NPK Ratio and pH</h3>
+                      
+                      <div class="form-group justify-content-center row p-3">
+                        <label for="nitrogen" class="col-sm-5 col-form-label fs-6 fw-bold">Nitrogen</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control"  placeholder="11">
+                        </div>
+                      </div>
+                      <div class="form-group justify-content-center row p-3">
+                        <label for="p" class="col-sm-5 col-form-label fs-6 fw-bold">Phosphorus</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control"  placeholder="21">
+                        </div>
+                      </div>
+                      <div class="form-group justify-content-center row p-3">
+                        <label for="k" class="col-sm-5 col-form-label fs-6 fw-bold">Potassium</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control"  placeholder="18">
+                        </div>
+                      </div>
+                    <div class="form-group justify-content-center row p-4">
+                    <div class="col-sm-8">
+                    <label for="level" class="col-sm-12 col-form-label text-left fs-6 fw-bold">pH Value</label>
+                    <input type="text" class="form-control col-sm-12" id="level" placeholder="6.8">
+                      </div>
+                    </div>
+                    <div class="form-group justify-content-center row p-3">
+                    <div class="col-sm-8">
+                    <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
+                    <select type="text" class="form-control col-sm-12" id="select">
+                      <option value="">Mukono</option>
+                    </select>
+                      </div>
+                    </div>
+                      </form>
+          <form class="row border form-row mb-2 mt-1">
+          <div class="form-group justify-content-center row p-3">
+          <div class="col-sm-8">
+          <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">Crop</label>
+          <select type="text" class="form-control col-sm-12" id="select">
+            <option value="">Select Crop</option>
+          </select>
+            </div>
+          </div>
+          <div class="form-group justify-content-center row p-3">
+          <div class="col-sm-8">
+          <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
+          <select type="text" class="form-control col-sm-12" id="select">
+            <option value="">Select District</option>
+          </select>
+            </div>
+          </div>
+          <div class="form-group justify-content-center row p-3">
+          <div class="col-sm-4">
+            <button type="button" class="btn btn-primary btn-block">Resubmit</button>
+            </div>
+          </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      <!-- signup form starts here  -->
+
+      <!-- signup form ends here  -->
+    <!-- Bootstrap Bundle JS -->
+    <script src="../static/js/bootstrap.js"></script>
+  </body>
+</html>
