@@ -1,22 +1,24 @@
-<div class="row d-flex justify-content-center mt-0 p-0 py-0">
-    <div class="col-10 mt-2 p-3">
-        <div class="row">
-            {% if crops|length < 1 %}
-                <p>No crops found</p>
-            {% else %}
-                {% for crop in crops %} 
-                <div class="col-4">
-                    <div class="card shadow-lg bg-light " style="width: 20rem; border-radius: 10%">
-                        <img src="{{ src|e }}" height="200px" class="card-img-top"
-                            style="border-radius: 10% 10% 0 0" alt="{{ name|e }} image">
-                        <div class="card-body text-center">
-                            <a href="{{ hred|e }}" class="nav-link text-primary text-bold">{{ name|e }} &nbsp;<span
-                                    class="fw-900 f-5">&#x3e;</span></a>
-                        </div>
+{% block crop_list %}
+    <div class="row pl-3 pt-4">
+
+        {% if crops["db_error"] %}
+            <p>There was an error connecting to the database. Please contact support.</p>
+        {% elif crops|length < 1 %}
+            <p>No crops found</p>
+        {% else %}
+            {% for crop in crops %} 
+            {% set image_path = 'images/'+crop['image'] %}
+            <div class="col-3 mb-4">
+                <div class="card shadow-lg bg-light " style="border-radius: 10%">
+                    <img src="{{ url_for('static', filename=image_path) }}" height="200px" class="card-img-top"
+                        style="border-radius: 10% 10% 0 0" alt="{{ crop['crop_name'] }} image">
+                    <div class="card-body text-center">
+                        <a href="{{ location }}/{{ crop['id'] }}" class="nav-link text-primary text-bold">{{ crop['crop_name'].capitalize() }} &nbsp;<span
+                                class="fw-900 f-5">&#x3e;</span></a>
                     </div>
                 </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
-</div>
+{% endblock %}

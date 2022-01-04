@@ -17,7 +17,7 @@ mysql = MySQL(app)
 # Function to fetch data from the db
 def db_query(query):
     try:
-    cursor = mysql.connection.cursor()
+        cursor = mysql.connection.cursor()
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
@@ -54,6 +54,16 @@ def crop_varieties():
     title = "Crop Varieties"
     activeTab = "varieties"
     return render_template('crop-varieties.html',title=title, activeTab=activeTab, crops=crops)
+
+@app.route('/crop-varieties/<int:id>')
+def show_varieties(id):
+    # Getting varities for selected crop
+    varieties = db_query("SELECT variety_name, maturity_duration, yield, special_attributes FROM variety WHERE id = '"+ str(id) +"'")
+
+    # Other route info
+    title="Crop Varieties"
+    activeTab = "varieties"
+    return render_template('crop-varieties-list.html',title=title, activeTab=activeTab, varieties=varieties)
 
 @app.route('/practices')
 def ideal_practices():
