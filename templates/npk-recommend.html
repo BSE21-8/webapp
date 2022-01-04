@@ -4,4 +4,37 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block page_content %}
+<div class="container">
+    <div class="row d-flex justify-content-center mt-2 p-2 py-2">
+        <h1 class="text-center h1 fs-1 fw-normal p-3">NPK Ratio Recommendation</h1>
+        <div class="col-5 mt-2 p-3">
+            <p class="text-center bg-light p-2 wrap">
+                This will recommend a suitable NPK ratio and pH your soil should have so as to cultivated the desired
+                crop </p>
+            <form class="row border form-row mb-2 mt-1">
+                <div class="form-group justify-content-center row p-3">
+                    <div class="col-sm-8">
+                        <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">Crop</label>
+                        <select type="text" class="form-control col-sm-12" id="select">
+                            <option value="">Select Crop</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group justify-content-center row p-3">
+                    <div class="col-sm-8">
+                        <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
+                        <select type="text" class="form-control col-sm-12" id="select">
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group justify-content-center row p-3">
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-primary btn-block">Get NPK Ratio</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
