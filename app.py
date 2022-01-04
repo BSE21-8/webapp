@@ -14,15 +14,18 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
-# Fetch crops from db
-def get_crops():
+# Function to fetch data from the db
+def db_query(query):
+    try:
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM crop")
-    crops = cursor.fetchall()
-    return crops
-    
-crops = get_crops()
-print(crops)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+    except Exception as e:
+        print("An error occured:")
+        print(e)
+        return {'db_error': True}
 
 # Normal Routes
 @app.route('/')
@@ -44,6 +47,10 @@ def npk_recommend():
 
 @app.route('/crop-varieties')
 def crop_varieties():
+    # Getting crops from db
+    crops = db_query("SELECT * FROM crop")
+    
+    # Other route info
     title = "Crop Varieties"
     activeTab = "varieties"
     return render_template('crop-varieties.html',title=title, activeTab=activeTab, crops=crops)
