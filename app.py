@@ -58,12 +58,25 @@ def crop_varieties():
 @app.route('/crop-varieties/<int:id>')
 def show_varieties(id):
     # Getting varities for selected crop
-    varieties = db_query("SELECT variety_name, maturity_duration, yield, special_attributes FROM variety WHERE id = '"+ str(id) +"'")
+    query = "SELECT variety.variety_name, variety.maturity_duration, variety.yield, variety.special_attributes, crop.crop_name FROM variety "
+    query += "LEFT JOIN species ON variety.species = species.id "
+    query += "LEFT JOIN crop ON species.crop = crop.id WHERE species.crop = '"+ str(id) +"'"
+    
+    varieties = db_query(query)
+    
+    # Determine crop name with error handling
+    if len(varieties) == 0:
+        cropName = "No varieties found"
+    elif len(varieties) == 1 and varieties['db_error']:
+        cropName = "Error"
+    else:
+        cropName = varieties[0]['crop_name'].capitalize()
 
     # Other route info
     title="Crop Varieties"
     activeTab = "varieties"
-    return render_template('crop-varieties-list.html',title=title, activeTab=activeTab, varieties=varieties)
+    
+    return render_template('crop-varieties-list.html',title=title, activeTab=activeTab, varieties=varieties, cropName=cropName)
 
 @app.route('/practices')
 def ideal_practices():
