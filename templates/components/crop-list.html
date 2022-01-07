@@ -2,11 +2,11 @@
     <div class="row pl-3 pt-4">
 
         {% if crops["db_error"] %}
-            <p>There was an error connecting to the database. Please contact support.</p>
+            {% include "components/db-error.html" %}
         {% elif crops|length < 1 %}
             <p>No crops found</p>
         {% else %}
-            {% for crop in crops %} 
+            {% for crop in crops %}
             {% set image_path = 'images/'+crop['image'] %}
             <div class="col-3 mb-4">
                 <div class="card shadow-lg bg-light " style="border-radius: 10%">
