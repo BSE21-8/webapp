@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect
-from flask_cors import CORS
+from flask_cors import CORS, extension
 from flask_mysqldb import MySQL
+from jinja2 import Environment
 
 app = Flask(__name__)
 CORS(app)
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
+app.config.from_object(__name__)
 
 # Db Config
 app.config['MYSQL_HOST'] = 'localhost'
@@ -14,6 +17,7 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
+# Utilities
 # Function to fetch data from the db
 def db_query(query):
     try:
@@ -27,7 +31,16 @@ def db_query(query):
         print(e)
         return {'db_error': True}
 
-# Normal Routes
+# Function to check if db result set is empty or has errors
+def check_result(result_set, subject):
+    if len(result_set) == 0:
+        return "No " + subject + " found"
+    elif len(result_set) == 1 and result_set['db_error']:
+        return "Error"
+    else:
+        return "True"
+
+# Recommendation Routes
 @app.route('/')
 def index():
     title = "IdealCrop"
@@ -35,12 +48,14 @@ def index():
 
 @app.route('/crop-recommend')
 def crop_recommend():
+    # Route info
     title = "Recommend Crop"
     activeTab = "crop_recommend"
     return render_template('crop-recommend.html',title=title, activeTab=activeTab)
 
 @app.route('/npk-recommend')
 def npk_recommend():
+    # Route info
     title = "Recommend NPK"
     activeTab = "npk_recommend"
     return render_template('npk-recommend.html',title=title, activeTab=activeTab)
@@ -50,7 +65,7 @@ def crop_varieties():
     # Getting crops from db
     crops = db_query("SELECT * FROM crop")
     
-    # Other route info
+    # Route info
     title = "Crop Varieties"
     activeTab = "varieties"
     return render_template('crop-varieties.html',title=title, activeTab=activeTab, crops=crops)
@@ -65,14 +80,12 @@ def show_varieties(id):
     varieties = db_query(query)
     
     # Determine crop name with error handling
-    if len(varieties) == 0:
-        cropName = "No varieties found"
-    elif len(varieties) == 1 and varieties['db_error']:
-        cropName = "Error"
-    else:
+    if check_result(varieties, 'varieties') == "True":
         cropName = varieties[0]['crop_name'].capitalize()
+    else:
+        cropName = check_result(varieties, 'varieties')
 
-    # Other route info
+    # Route info
     title="Crop Varieties"
     activeTab = "varieties"
     
@@ -80,13 +93,39 @@ def show_varieties(id):
 
 @app.route('/practices')
 def ideal_practices():
-    title = "Recommend Crop"
+    # Get crops from db
+    crops = db_query("SELECT * FROM crop")
+
+    # Route info
+    title = "Cultivation Practices"
     activeTab = "practices"
-    return render_template('practices.html',title=title, activeTab=activeTab)
+    return render_template('practices.html',title=title, activeTab=activeTab, crops=crops)
+
+@app.route('/practices/<int:id>')
+def show_practices(id):
+    # Getting varities for selected crop
+    query = "SELECT crop_practice.id, stage.stage_name, practice.practice_name, crop_practice.practice_description, crop.crop_name "
+    query += "FROM crop_practice LEFT JOIN practice ON crop_practice.practice = practice.id "
+    query += "LEFT JOIN stage ON crop_practice.stage = stage.id LEFT JOIN crop ON crop_practice.crop = crop.id "
+    query += "WHERE crop_practice.crop = '"+ str(id) +"'"
+
+    practices = db_query(query)
+
+    # Determine crop name with error handling
+    if check_result(practices, 'practices') == "True":
+        cropName = practices[0]['crop_name'].capitalize()
+    else:
+        cropName = check_result(practices, 'practices')
+
+    # Route info
+    title = "Cultivation Practices"
+    activeTab = "practices"
+    return render_template('practices-list.html',title=title, activeTab=activeTab, practices=practices, cropName=cropName)
 
 @app.route('/zoning')
 def crop_zoning():
-    title = "Recommend Crop"
+    # Route info
+    title = "Crop Zoning"
     activeTab = "zoning"
     return render_template('zoning.html',title=title, activeTab=activeTab)
 
