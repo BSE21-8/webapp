@@ -12,42 +12,43 @@
                 This will recommend a crop suitable to cultivate based on your soil composition and location. Please
                 enter the following details
             </p>
-            <form class="row border form-row mb-2 mt-1">
+            <form class="row border form-row mb-2 mt-1" method="POST" action="{{ url_for('crop_prediction') }}">
                 <div class="form-group justify-content-center row p-3">
                     <label for="nitrogen" class="col-sm-5 col-form-label fs-6 fw-bold">Nitrogen</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" placeholder="N value">
+                        <input type="number" class="form-control" placeholder="N value" name="nitrogen" id="nitrogen">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <label for="p" class="col-sm-5 col-form-label fs-6 fw-bold">Phosphorus</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" placeholder="P value">
+                        <input type="number" class="form-control" placeholder="P value" name="phosphorus" id="phosphorus">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <label for="k" class="col-sm-5 col-form-label fs-6 fw-bold">Potassium</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" placeholder="K value">
+                        <input type="number" class="form-control" placeholder="K value" name="potassium" id="potassium">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-4">
                     <div class="col-sm-8">
                         <label for="level" class="col-sm-12 col-form-label text-left fs-6 fw-bold">pH Value</label>
-                        <input type="text" class="form-control col-sm-12" id="level" placeholder="Enter soil pH value">
+                        <input type="number" class="form-control col-sm-12" id="level" name="ph" placeholder="Enter soil pH value">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <div class="col-sm-8">
                         <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
-                        <select type="text" class="form-control col-sm-12" id="select">
-                            <option value="">Select District</option>
+                        <select type="text" class="form-control col-sm-12" id="select" name="district">
+                            <option value="mukono">Mukono</option>
+                            <option value="kampala">Kampala</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <div class="col-sm-3">
-                        <button type="button" class="btn btn-primary">Get Crop</button>
+                        <button type="submit" class="btn btn-primary">Get Crop</button>
                     </div>
                 </div>
             </form>
