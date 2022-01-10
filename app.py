@@ -12,6 +12,29 @@ crop_recommendation_model = pickle.load(
     open(crop_recommendation_model_path, 'rb'))
 
 
+def rainfall_fetch(city):
+    rainfallData = {
+        'kabale': 60,
+        'entebbe': 150,
+        'gulu': 5,
+        'lira': 5,
+        'mbarara': 60,
+        'bushenyi': 100,
+        'masindi': 2,
+        'jinja': 150,
+        'serere': 60,
+        'soroti': 50,
+        'mubende': 30,
+        'kampala': 60,
+        'arua': 0,
+        'tororo': 70,
+        'kotido': 2,
+        'kasese': 80,
+        'kitgum': 19
+    }
+    return rainfallData[city]
+
+
 def weather_fetch(city_name):
     """
     Fetch and returns the temperature and humidity of a city
@@ -60,6 +83,7 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
+
 # Utilities
 
 # Function to fetch data from the db
@@ -75,6 +99,7 @@ def db_query(query):
         print(e)
         return {'db_error': True}
 
+
 # Function to check if db result set is empty or has errors
 def check_result(result_set, subject):
     if len(result_set) == 0:
@@ -83,6 +108,7 @@ def check_result(result_set, subject):
         return "Error"
     else:
         return "True"
+
 
 # Recommendation Routes
 
@@ -104,16 +130,15 @@ def crop_recommend():
 @app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
     title = 'Crop prediction'
-
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
         P = int(request.form['phosphorus'])
         K = int(request.form['potassium'])
         ph = float(request.form['ph'])
-        rainfall = 100
+        rainfall = rainfall_fetch(request.form.get('district'))
         city = request.form.get('district')
 
-        if weather_fetch(city) != None:
+        if weather_fetch(city) is not None:
             temperature, humidity = weather_fetch(city)
             data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
             my_prediction = crop_recommendation_model.predict(data)
@@ -137,7 +162,7 @@ def npk_recommend():
 def crop_varieties():
     # Getting crops from db
     crops = db_query("SELECT * FROM crop")
-    
+
     # Route info
     title = "Crop Varieties"
     activeTab = "varieties"
@@ -160,7 +185,7 @@ def show_varieties(id):
         cropName = check_result(varieties, 'varieties')
 
     # Route info
-    title="Crop Varieties"
+    title = "Crop Varieties"
     activeTab = "varieties"
 
     return render_template('crop-varieties-list.html', title=title, activeTab=activeTab, varieties=varieties,
@@ -175,7 +200,8 @@ def ideal_practices():
     # Route info
     title = "Cultivation Practices"
     activeTab = "practices"
-    return render_template('practices.html',title=title, activeTab=activeTab, crops=crops)
+    return render_template('practices.html', title=title, activeTab=activeTab, crops=crops)
+
 
 @app.route('/practices/<int:id>')
 def show_practices(id):
@@ -183,7 +209,7 @@ def show_practices(id):
     query = "SELECT crop_practice.id, stage.stage_name, practice.practice_name, crop_practice.practice_description, crop.crop_name "
     query += "FROM crop_practice LEFT JOIN practice ON crop_practice.practice = practice.id "
     query += "LEFT JOIN stage ON crop_practice.stage = stage.id LEFT JOIN crop ON crop_practice.crop = crop.id "
-    query += "WHERE crop_practice.crop = '"+ str(id) +"'"
+    query += "WHERE crop_practice.crop = '" + str(id) + "'"
 
     practices = db_query(query)
 
@@ -196,7 +222,9 @@ def show_practices(id):
     # Route info
     title = "Cultivation Practices"
     activeTab = "practices"
-    return render_template('practices-list.html',title=title, activeTab=activeTab, practices=practices, cropName=cropName)
+    return render_template('practices-list.html', title=title, activeTab=activeTab, practices=practices,
+                           cropName=cropName)
+
 
 @app.route('/zoning')
 def crop_zoning():
@@ -213,22 +241,23 @@ def crop_zoning():
     crops = {}
     regions = {}
     if check_result(crop_zone, 'crop zones') == "True":
-                
+
         # Populate regions and crops list 
         for row in crop_zone:
             if row['region_name'] in regions:
                 continue
             else:
-                regions.update({row['region']:row['region_name']})
-                
+                regions.update({row['region']: row['region_name']})
+
             if row['crop_name'] in crops:
                 continue
             else:
-                crops.update({row['crop']:row['crop_name']})
-    
+                crops.update({row['crop']: row['crop_name']})
+
     return render_template('zoning.html', title=title, activeTab=activeTab, crops=crops, regions=regions)
 
-@app.route('/zoning-details' , methods=['POST'])
+
+@app.route('/zoning-details', methods=['POST'])
 def crop_zone_details():
     # Route info
     title = "Crop Zoning"
@@ -240,7 +269,7 @@ def crop_zone_details():
         cropId = ""
         zone_for = ""
         name = ""
-        
+
         # Begin query for zoning
         queryZone = "SELECT crop_zone.region, region.region_name, crop.crop_name, crop_zone.yield FROM crop_zone "
         queryZone += "LEFT JOIN region ON crop_zone.region = region.id "
@@ -249,15 +278,15 @@ def crop_zone_details():
         # Differentiate crop and region
         if request.form.get('regionSelect') != None:
             regionId = request.form.get('regionSelect')
-            queryZone += "WHERE crop_zone.region = '" + str(regionId) +"' ORDER BY crop_zone.yield DESC"
+            queryZone += "WHERE crop_zone.region = '" + str(regionId) + "' ORDER BY crop_zone.yield DESC"
             zone_for = "Crops"
         if request.form.get('cropSelect') != None:
             cropId = request.form.get('cropSelect')
             queryZone += "WHERE crop_zone.crop = '" + str(cropId) + "' ORDER BY crop_zone.yield DESC"
             zone_for = "Regions"
-        
+
         zone_result = db_query(queryZone)
-        
+
         # Check for errors or empty result set determing crop name
         if check_result(zone_result, 'crop zone') == "True":
             if zone_for == "Crops":
@@ -267,16 +296,18 @@ def crop_zone_details():
         else:
             name = check_result(zone_result, 'crop zone')
 
-        return render_template('zoning-list.html', title=title, activeTab=activeTab, zone_result=zone_result, name=name, zone_for=zone_for)
+        return render_template('zoning-list.html', title=title, activeTab=activeTab, zone_result=zone_result, name=name,
+                               zone_for=zone_for)
+
 
 @app.route('/show-districts/<int:id>')
 def show_districts(id):
     # Route info
     title = 'Region Districts'
-    
+
     # Get districts
     queryDistrict = "SELECT district.district_name, region.region_name, region.id FROM district "
-    queryDistrict += "LEFT JOIN region ON district.region = region.id WHERE district.region = '"+ str(id) + "'"
+    queryDistrict += "LEFT JOIN region ON district.region = region.id WHERE district.region = '" + str(id) + "'"
 
     districts = db_query(queryDistrict)
 
@@ -287,15 +318,18 @@ def show_districts(id):
 
     return render_template('show-districts.html', title=title, districts=districts, regionName=regionName)
 
+
 # Error Routes
 
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html")
 
+
 @app.errorhandler(405)
 def method_not_allowed(e):
     return render_template("405.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
