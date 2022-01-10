@@ -212,6 +212,9 @@ def crop_zoning():
 def not_found(e):
     return render_template("404.html")
 
+@app.errorhandler(405)
+def method_not_allowed(e):
+    return render_template("405.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
