@@ -87,6 +87,20 @@ def check_result(result_set, subject):
 # Recommendation Routes
 
 # Normal Routes
+@app.route('/')
+def index():
+    title = "IdealCrop"
+    return render_template('index.html', title=title)
+
+
+@app.route('/crop-recommend')
+def crop_recommend():
+    # Route info
+    title = "Recommend Crop"
+    activeTab = "crop_recommend"
+    return render_template('crop-recommend.html', title=title, activeTab=activeTab)
+
+
 @app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
     title = 'Crop prediction'
@@ -109,20 +123,6 @@ def crop_prediction():
 
         else:
             return render_template('404.html', title=title)
-
-
-@app.route('/')
-def index():
-    title = "IdealCrop"
-    return render_template('index.html', title=title)
-
-
-@app.route('/crop-recommend')
-def crop_recommend():
-    # Route info
-    title = "Recommend Crop"
-    activeTab = "crop_recommend"
-    return render_template('crop-recommend.html', title=title, activeTab=activeTab)
 
 
 @app.route('/npk-recommend')
@@ -153,7 +153,7 @@ def show_varieties(id):
 
     varieties = db_query(query)
 
-    # Determine crop name with error handling
+    # Check for errors or empty result set before determining crop name
     if check_result(varieties, 'varieties') == "True":
         cropName = varieties[0]['crop_name'].capitalize()
     else:
@@ -187,7 +187,7 @@ def show_practices(id):
 
     practices = db_query(query)
 
-    # Determine crop name with error handling
+    # Check for errors or empty result set determing crop name
     if check_result(practices, 'practices') == "True":
         cropName = practices[0]['crop_name'].capitalize()
     else:
@@ -203,8 +203,89 @@ def crop_zoning():
     # Route info
     title = "Crop Zoning"
     activeTab = "zoning"
-    return render_template('zoning.html', title=title, activeTab=activeTab)
 
+    # Get crops and regions to display
+    queryZone = "SELECT crop_zone.crop, crop_zone.region, crop.crop_name, region.region_name FROM crop_zone "
+    queryZone += "LEFT JOIN crop ON crop_zone.crop = crop.id LEFT JOIN region ON crop_zone.region = region.id"
+    crop_zone = db_query(queryZone)
+
+    # Check for errors or empty result set
+    crops = {}
+    regions = {}
+    if check_result(crop_zone, 'crop zones') == "True":
+                
+        # Populate regions and crops list 
+        for row in crop_zone:
+            if row['region_name'] in regions:
+                continue
+            else:
+                regions.update({row['region']:row['region_name']})
+                
+            if row['crop_name'] in crops:
+                continue
+            else:
+                crops.update({row['crop']:row['crop_name']})
+    
+    return render_template('zoning.html', title=title, activeTab=activeTab, crops=crops, regions=regions)
+
+@app.route('/zoning-details' , methods=['POST'])
+def crop_zone_details():
+    # Route info
+    title = "Crop Zoning"
+    activeTab = "zoning"
+
+    # Handle submissions
+    if request.method == 'POST':
+        regionId = ""
+        cropId = ""
+        zone_for = ""
+        name = ""
+        
+        # Begin query for zoning
+        queryZone = "SELECT crop_zone.region, region.region_name, crop.crop_name, crop_zone.yield FROM crop_zone "
+        queryZone += "LEFT JOIN region ON crop_zone.region = region.id "
+        queryZone += "LEFT JOIN crop ON crop_zone.crop = crop.id "
+
+        # Differentiate crop and region
+        if request.form.get('regionSelect') != None:
+            regionId = request.form.get('regionSelect')
+            queryZone += "WHERE crop_zone.region = '" + str(regionId) +"' ORDER BY crop_zone.yield DESC"
+            zone_for = "Crops"
+        if request.form.get('cropSelect') != None:
+            cropId = request.form.get('cropSelect')
+            queryZone += "WHERE crop_zone.crop = '" + str(cropId) + "' ORDER BY crop_zone.yield DESC"
+            zone_for = "Regions"
+        
+        zone_result = db_query(queryZone)
+        
+        # Check for errors or empty result set determing crop name
+        if check_result(zone_result, 'crop zone') == "True":
+            if zone_for == "Crops":
+                name = zone_result[0]['region_name']
+            elif zone_for == "Regions":
+                name = zone_result[0]['crop_name'].capitalize()
+        else:
+            name = check_result(zone_result, 'crop zone')
+
+        return render_template('zoning-list.html', title=title, activeTab=activeTab, zone_result=zone_result, name=name, zone_for=zone_for)
+
+@app.route('/show-districts/<int:id>')
+def show_districts(id):
+    # Route info
+    title = 'Region Districts'
+    
+    # Get districts
+    queryDistrict = "SELECT district.district_name, region.region_name, region.id FROM district "
+    queryDistrict += "LEFT JOIN region ON district.region = region.id WHERE district.region = '"+ str(id) + "'"
+
+    districts = db_query(queryDistrict)
+
+    if check_result(districts, 'districts') == "True":
+        regionName = districts[0]['region_name']
+    else:
+        regionName = check_result(districts, 'districts')
+
+    return render_template('show-districts.html', title=title, districts=districts, regionName=regionName)
 
 # Error Routes
 
