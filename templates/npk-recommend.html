@@ -11,26 +11,30 @@
             <p class="text-center bg-light p-2 wrap">
                 This will recommend a suitable NPK ratio and pH your soil should have so as to cultivated the desired
                 crop </p>
-            <form class="row border form-row mb-2 mt-1">
+            <form method="post" action="{{ url_for('npk_predict') }}" class="row border form-row mb-2 mt-1">
                 <div class="form-group justify-content-center row p-3">
                     <div class="col-sm-8">
                         <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">Crop</label>
-                        <select type="text" class="form-control col-sm-12" id="select">
-                            <option value="">Select Crop</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group justify-content-center row p-3">
-                    <div class="col-sm-8">
-                        <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
-                        <select type="text" class="form-control col-sm-12" id="select">
-                            <option value="">Select District</option>
+                        <select type="text" class="form-control col-sm-12" id="cropname" name="cropname">
+                            <option value="apple">Apple</option>
+                            <option value="banana">Banana</option>
+                            <option value="coconut">Coconut</option>
+                            <option value="coffee">Coffee</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="grapes">Grapes</option>
+                            <option value="kidneybeans">Kidney Beans</option>
+                            <option value="maize">Maize</option>
+                            <option value="mungbean">Mung Bean</option>
+                            <option value="orange">Orange</option>
+                            <option value="pigeonpeas">Pigeon peas</option>
+                            <option value="rice">Rice</option>
+                            <option value="Watermelon">Watermelon</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary btn-block">Get NPK Ratio</button>
+                        <button type="submit" class="btn btn-primary btn-block">Get NPK Ratio</button>
                     </div>
                 </div>
             </form>

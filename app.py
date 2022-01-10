@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 import numpy as np
+import pandas as pd
 import requests
 import config
 import pickle
@@ -156,6 +157,18 @@ def npk_recommend():
     title = "Recommend NPK"
     activeTab = "npk_recommend"
     return render_template('npk-recommend.html', title=title, activeTab=activeTab)
+
+
+@app.route('/npk-predict', methods=['POST'])
+def npk_predict():
+    title = 'NPK and Ph suggestion'
+    crop_name = str(request.form['cropname'])
+    df = pd.read_csv('data/fertilizer.csv')
+    N = df[df['Crop'] == crop_name]['N'].iloc[0]
+    P = df[df['Crop'] == crop_name]['P'].iloc[0]
+    K = df[df['Crop'] == crop_name]['K'].iloc[0]
+    pH = df[df['Crop'] == crop_name]['pH'].iloc[0]
+    return render_template('npk-result.html', title=title, N=N, K=K, P=P, PH=pH)
 
 
 @app.route('/crop-varieties')
