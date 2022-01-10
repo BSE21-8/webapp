@@ -90,7 +90,7 @@ def check_result(result_set, subject):
 @app.route('/')
 def index():
     title = "IdealCrop"
-    return render_template('index.html', title=title)
+    return redirect("/crop-recommend")
 
 
 @app.route('/crop-recommend')
