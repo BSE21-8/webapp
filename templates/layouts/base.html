@@ -8,6 +8,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/datatables.css') }}">
+
+        <!-- jQuery -->
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
         <title>{% block title %}{% endblock %}</title>
     {% endblock %}
 </head>
@@ -16,7 +19,7 @@
     {% block body %}
     {% endblock %}
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="../static/js/bootstrap.js"></script>
+    <!-- Bootstrap Bundle JS-->
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 </body>
 </html>
