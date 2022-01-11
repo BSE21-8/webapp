@@ -4,9 +4,7 @@ from flask_mysqldb import MySQL
 import numpy as np
 import pandas as pd
 import requests
-import config
 import pickle
-import io
 
 crop_recommendation_model_path = 'model/RandomForest.pkl'
 crop_recommendation_model = pickle.load(
@@ -50,9 +48,10 @@ def weather_fetch(city_name):
     base_url = "https://pro.openweathermap.org/data/2.5/forecast/climate?"
 
     complete_url = base_url + "q=" + city_name + "&appid=" + api_key
+    x = ""
+    try:
     response = requests.get(complete_url)
     x = response.json()
-
     if x["code"] != "404":
         for i in x['list']:
             total_temperature += (i['temp']['max'])
@@ -68,7 +67,10 @@ def weather_fetch(city_name):
         return temperature, humidity
     else:
         return None
-
+    except Exception as e:
+        print("An error occured:")
+        print(e)
+        return None
 
 app = Flask(__name__)
 CORS(app)
@@ -85,7 +87,7 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
-# Utilities
+############### Utilities ###############
 
 # Function to fetch data from the db
 def db_query(query):
