@@ -68,7 +68,8 @@ INSERT INTO `crop` (`id`, `crop_name`, `image`, `created_at`, `updated_at`, `cre
 (10, 'papaya', '/papaya.jpg', '2022-01-09 05:54:17', '2022-01-11 00:16:05', 1, 1, 1),
 (11, 'peas', '/peas.jpg', '2022-01-09 05:54:17', '2022-01-11 00:16:31', 1, 1, 1),
 (12, 'rice', '/rice.jpg', '2022-01-09 05:54:17', '2022-01-11 00:16:47', 1, 1, 1),
-(13, 'watermelon', 'watermelon.jpg', '2022-01-11 00:17:06', '2022-01-11 00:17:06', 1, 1, 1);
+(13, 'watermelon', 'watermelon.jpg', '2022-01-11 00:17:06', '2022-01-11 00:17:06', 1, 1, 1),
+(14, 'mango', 'mango.jpg', '2022-01-11 03:35:09', '2022-01-11 03:35:09', 1, 1, 1);
 
 -- Dummy species
 INSERT INTO `species` (`id`, `speicies_name`, `crop`, `created_at`, `updated_at`, `created_by`, `last_updated_by`) VALUES
