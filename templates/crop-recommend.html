@@ -8,61 +8,87 @@
     <div class="row d-flex justify-content-center mt-2 p-2 py-2">
         <h1 class="text-center h1 fs-1 fw-normal p-3">Crop Recommendation</h1>
         <div class="col-5 mt-2 p-3">
-            <p class="text-center bg-light p-2 wrap">
-                This will recommend a crop suitable to cultivate based on your soil composition and location. Please
-                enter the following details
-            </p>
+            {% if prediction %}
+                <p class="text-center text-white bg-success p-2 wrap">
+                    The most suitable crop is <b>{{ prediction.capitalize() }}</b>
+                </p>
+                {% set image_path = "images/"+prediction+".jpg" %}
+                <div class="card shadow-sm bg-light mx-auto mb-4" style="border-radius: 10%; width: 16rem;">
+                    <img src="{{ url_for('static', filename=image_path) }}" height="200px" class="card-img-top"
+                        style="border-radius: 10% 10% 0 0" alt="{{ prediction }} image">
+                    <div class="card-body text-center">
+                        <small style="font-weight: 600;color: green;">&#10004; Best Option</small>
+                        <p class="m-0">{{ prediction.capitalize() }}</p>
+                    </div>
+                </div>
+            {% elif predictionError %}
+                <p class="text-center bg-danger text-white p-2 wrap">
+                    {{ predictionError }}
+                </p>
+            {% else %}
+                <p class="text-center bg-light p-2 wrap">
+                    This will recommend a crop suitable to cultivate based on your soil composition and location. Please
+                    enter the following details
+                </p>
+            {% endif %}
+            
             <form class="row border form-row mb-2 mt-1" method="POST" action="{{ url_for('crop_prediction') }}">
+                {% if prediction %}
+                    <h4 class="text-center pt-4 pb-1">You submitted</h4>
+                    <hr style="width: 100px;margin: auto;">
+                {% endif %}
+                
                 <div class="form-group justify-content-center row p-3">
                     <label for="nitrogen" class="col-sm-5 col-form-label fs-6 fw-bold">Nitrogen</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" placeholder="N value" name="nitrogen" id="nitrogen">
+                        <input type="number" class="form-control" placeholder="N value" name="nitrogen" id="nitrogen" value="{{ N if N else '' }}">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <label for="p" class="col-sm-5 col-form-label fs-6 fw-bold">Phosphorus</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" placeholder="P value" name="phosphorus" id="phosphorus">
+                        <input type="number" class="form-control" placeholder="P value" name="phosphorus" id="phosphorus" value="{{ P if P else '' }}">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <label for="k" class="col-sm-5 col-form-label fs-6 fw-bold">Potassium</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" placeholder="K value" name="potassium" id="potassium">
+                        <input type="number" class="form-control" placeholder="K value" name="potassium" id="potassium" value="{{ K if K else '' }}">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-4">
                     <div class="col-sm-8">
                         <label for="level" class="col-sm-12 col-form-label text-left fs-6 fw-bold">pH Value</label>
-                        <input type="number" class="form-control col-sm-12" id="level" name="ph" placeholder="Enter soil pH value">
+                        <input type="text" class="form-control col-sm-12" id="level" name="ph" placeholder="Enter soil pH value" value="{{ ph if ph else '' }}">
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <div class="col-sm-8">
                         <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
                         <select type="text" class="form-control col-sm-12" id="select" name="district">
-                            <option value="kabale">Kabale</option>
-                            <option value="kampala">Kampala</option>
-                            <option value="entebbe">Entebbe</option>
-                            <option value="gulu">Gulu</option>
-                            <option value="lira">Lira</option>
-                            <option value="mbarara">Mbarara</option>
-                            <option value="bushenyi">Bushenyi</option>
-                            <option value="masindi">Masindi</option>
-                            <option value="jinja">Jinja</option>
-                            <option value="serere">Serere</option>
-                            <option value="soroti">Soroti</option>
-                            <option value="mubende">Mubende</option>
-                            <option value="arua">Arua</option>
-                            <option value="tororo">Tororo</option>
-                            <option value="kotido">Kotido</option>
-                            <option value="kasese">Kasese</option>
+                            <option>-- Select District --</option>
+                                <option value="arua" {{ 'selected' if city=='arua' else '' }}>Arua</option>
+                                <option value="bushenyi" {{ 'selected' if city=='bushenyi' else '' }}>Bushenyi</option>
+                                <option value="entebbe" {{ 'selected' if city=='entebbe' else '' }}>Entebbe</option>
+                                <option value="gulu" {{ 'selected' if city=='gulu' else '' }}>Gulu</option>
+                                <option value="jinja" {{ 'selected' if city=='jinja' else '' }}>Jinja</option>
+                                <option value="kabale" {{ 'selected' if city=='kabale' else '' }}>Kabale</option>
+                                <option value="kampala" {{ 'selected' if city=='kampala' else '' }}>Kampala</option>
+                                <option value="kasese" {{ 'selected' if city=='kasese' else '' }}>Kasese</option>
+                                <option value="kotido" {{ 'selected' if city=='kotido' else '' }}>Kotido</option>
+                                <option value="lira" {{ 'selected' if city=='lira' else '' }}>Lira</option>
+                                <option value="masindi" {{ 'selected' if city=='masindi' else '' }}>Masindi</option>
+                                <option value="mbarara" {{ 'selected' if city=='mbarara' else '' }}>Mbarara</option>
+                                <option value="mubende" {{ 'selected' if city=='mubende' else '' }}>Mubende</option>
+                                <option value="serere" {{ 'selected' if city=='serere' else '' }}>Serere</option>
+                                <option value="soroti" {{ 'selected' if city=='soroti' else '' }}>Soroti</option>
+                                <option value="tororo" {{ 'selected' if city=='tororo' else '' }}>Tororo</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group justify-content-center row p-3">
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Get Crop</button>
+                        <button type="submit" class="btn btn-primary">{{ "Resubmit" if prediction else "Get Crop" }}</button>
                     </div>
                 </div>
             </form>

@@ -9,7 +9,7 @@
             {% for crop in crops %}
             {% set image_path = 'images/'+crop['image'] %}
             <div class="col-3 mb-4">
-                <div class="card shadow-lg bg-light " style="border-radius: 10%">
+                <div class="card shadow-sm bg-light " style="border-radius: 10%">
                     <img src="{{ url_for('static', filename=image_path) }}" height="200px" class="card-img-top"
                         style="border-radius: 10% 10% 0 0" alt="{{ crop['crop_name'] }} image">
                     <div class="card-body text-center">

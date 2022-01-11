@@ -50,23 +50,23 @@ def weather_fetch(city_name):
     complete_url = base_url + "q=" + city_name + "&appid=" + api_key
     x = ""
     try:
-    response = requests.get(complete_url)
-    x = response.json()
-    if x["code"] != "404":
-        for i in x['list']:
-            total_temperature += (i['temp']['max'])
+        response = requests.get(complete_url)
+        x = response.json()
+        if x["code"] != "404":
+            for i in x['list']:
+                total_temperature += (i['temp']['max'])
 
-        for h in x['list']:
-            total_humidity += h['humidity']
+            for h in x['list']:
+                total_humidity += h['humidity']
 
-        average_temperature = total_temperature / 30
-        average_humidity = total_humidity / 30
+            average_temperature = total_temperature / 30
+            average_humidity = total_humidity / 30
 
-        temperature = round((average_temperature - 273.15), 2)
-        humidity = average_humidity
-        return temperature, humidity
-    else:
-        return None
+            temperature = round((average_temperature - 273.15), 2)
+            humidity = average_humidity
+            return temperature, humidity
+        else:
+            return None
     except Exception as e:
         print("An error occured:")
         print(e)
@@ -132,7 +132,10 @@ def crop_recommend():
 
 @app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
-    title = 'Crop prediction'
+    # Route info
+    title = "Crop Prediction"
+    activeTab = "crop_recommend"
+    
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
         P = int(request.form['phosphorus'])
@@ -146,11 +149,10 @@ def crop_prediction():
             data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
             my_prediction = crop_recommendation_model.predict(data)
             final_prediction = my_prediction[0]
-
-            return render_template('crop-result.html', prediction=final_prediction, title=title)
-
+            return render_template('crop-recommend.html', title=title, activeTab=activeTab, prediction=final_prediction, N=N, P=P, K=K, ph=ph, city=city)
         else:
-            return render_template('404.html', title=title)
+            error = "There was an error completing your request, please try again later."
+            return render_template('crop-recommend.html', title=title, activeTab=activeTab, predictionError=error)
 
 
 @app.route('/npk-recommend')
@@ -163,14 +165,18 @@ def npk_recommend():
 
 @app.route('/npk-predict', methods=['POST'])
 def npk_predict():
-    title = 'NPK and Ph suggestion'
+    # Route info
+    title = "Recommend NPK"
+    activeTab = "npk_recommend"
+
     crop_name = str(request.form['cropname'])
     df = pd.read_csv('data/fertilizer.csv')
     N = df[df['Crop'] == crop_name]['N'].iloc[0]
     P = df[df['Crop'] == crop_name]['P'].iloc[0]
     K = df[df['Crop'] == crop_name]['K'].iloc[0]
     pH = df[df['Crop'] == crop_name]['pH'].iloc[0]
-    return render_template('npk-result.html', title=title, N=N, K=K, P=P, PH=pH)
+
+    return render_template('npk-recommend.html', title=title, activeTab=activeTab, crop_name=crop_name, N=N, P=P, K=K, pH=pH)
 
 
 @app.route('/crop-varieties')
