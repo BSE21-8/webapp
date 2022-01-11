@@ -38,6 +38,7 @@
                             <tr>
                                 <th scope="col">{{ zone_for }}</th>
                                 <th scope="col">Yeild (H/Ta)</th>
+                                <th scope="col">Crop Extras</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,6 +50,9 @@
                                         <td><a href="/show-districts/{{ row['region'] }}">{{ row['region_name'] }}</a></td>
                                     {% endif %}
                                     <td>{{ row['yield'] }}</td>
+                                    {% if row['crop_extras'] %}
+                                        <td>{{ row['crop_extras'] }}</td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             

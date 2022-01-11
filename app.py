@@ -181,8 +181,12 @@ def npk_predict():
 
 @app.route('/crop-varieties')
 def crop_varieties():
-    # Getting crops from db
-    crops = db_query("SELECT * FROM crop")
+    # Getting crops with varieties
+    query = "SELECT DISTINCT(variety.species), species.crop, crop.id, crop.crop_name, crop.image FROM variety "
+    query += "LEFT JOIN species ON variety.species = species.id "
+    query += "LEFT JOIN crop ON species.crop = crop.id;"
+
+    crops = db_query(query)
 
     # Route info
     title = "Crop Varieties"
@@ -215,8 +219,11 @@ def show_varieties(id):
 
 @app.route('/practices')
 def ideal_practices():
-    # Get crops from db
-    crops = db_query("SELECT * FROM crop")
+    # Getting crops with varieties
+    query = "SELECT DISTINCT(crop_practice.crop), crop.id, crop.crop_name, crop.image FROM crop_practice "
+    query += "LEFT JOIN crop ON crop_practice.crop = crop.id;"
+
+    crops = db_query(query)
 
     # Route info
     title = "Cultivation Practices"
@@ -292,7 +299,7 @@ def crop_zone_details():
         name = ""
 
         # Begin query for zoning
-        queryZone = "SELECT crop_zone.region, region.region_name, crop.crop_name, crop_zone.yield FROM crop_zone "
+        queryZone = "SELECT crop_zone.region, region.region_name, crop.crop_name, crop_zone.crop_extras, crop_zone.yield FROM crop_zone "
         queryZone += "LEFT JOIN region ON crop_zone.region = region.id "
         queryZone += "LEFT JOIN crop ON crop_zone.crop = crop.id "
 
