@@ -26,7 +26,7 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
-                        <form method="post" action="/zoning-details" class="row border form-row mb-2 mt-1">
+                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1">
                             <div class="form-group justify-content-center row p-3">
                                 <div class="col-sm-8">
                                     <label for="regionSelect"
@@ -46,7 +46,7 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <form method="post" action="/zoning-details" class="row border form-row mb-2 mt-1">
+                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1">
                             <div class="form-group justify-content-center row p-3">
                                 <div class="col-sm-8">
                                     <label for="cropSelect"
