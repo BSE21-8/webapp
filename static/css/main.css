@@ -12,3 +12,13 @@ body,html {
   font-size: 15px;
   line-height: normal;
 }
+
+body{
+  background: #f8f9fa;
+}
+.border.form-row{
+  background: white;
+}
+.note{
+  background: #ededee;
+}

@@ -7,7 +7,7 @@
 {% block page_content %}
 <div class="container">
     <div class="row d-flex justify-content-center mt-2 p-2 py-2">
-        <h1 class="text-center h1 fs-1 fw-normal p-3">Crop Zoning</h1>
+        <h2 class="text-center p-3">Crop Zoning</h2>
         {% if zone_result|length >= 1 and not zone_result['db_error'] %}
             <div class="col-8 mt-2 justify-content-center card-center row p-3">
                 <p class="text-center text-white bg-success p-2 wrap">
@@ -23,7 +23,7 @@
         {% endif %}
     </div>
     <div class="row d-flex justify-content-center mt-2 p-2 py-2">
-        <div class="col-8 border p-4">
+        <div class="col-8 border p-4 bg-white">
             {% if zone_result['db_error'] %}
                 {% include "components/db-error.html" %}
             {% elif zone_result|length < 1 %}
