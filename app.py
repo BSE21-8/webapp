@@ -78,10 +78,10 @@ app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.config.from_object(__name__)
 
 # Db Config
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'idealcrop_developer'
-app.config['MYSQL_PASSWORD'] = 'l_Lux0ejI3om!Q6e'
-app.config['MYSQL_DB'] = 'idealcrop'
+app.config['MYSQL_HOST'] = 'sql10.freemysqlhosting.net'
+app.config['MYSQL_USER'] = 'sql10465062'
+app.config['MYSQL_PASSWORD'] = '2u1wZVZrfj'
+app.config['MYSQL_DB'] = 'sql10465062'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
