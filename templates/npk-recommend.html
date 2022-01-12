@@ -55,7 +55,7 @@
                     <div class="col-md-8">
                         <label for="select" class="col-md-12 col-form-label text-left fs-6 fw-bold my-auto">Crop</label>
                         <select type="text" class="form-control col-md-12" id="cropname" name="cropname">
-                            <option>-- Select Crop --</option>
+                            <option value="">-- Select Crop --</option>
                             <option value="apple" {{ 'selected' if crop_name=='apple' else '' }}>Apple</option>
                             <option value="banana" {{ 'selected' if crop_name=='banana' else '' }}>Banana</option>
                             <option value="coconut" {{ 'selected' if crop_name=='coconut' else '' }}>Coconut</option>
@@ -81,4 +81,47 @@
         </div>
     </div>
 </div>
+{% include 'components/validate-script.html' %}
+
+<script>
+    $(document).ready(() => {
+        // Add method for float points
+        $.validator.addMethod( "floatPoint", function( value, element ) {
+            return this.optional( element ) || /[+-]?((\d+\.?\d*)|(\.\d+))/i.test( value );
+        }, "Please enter a number between 0 - 14" );
+
+        $("#recommend").validate({
+            rules: {
+                ph: {
+                    required: true,
+                    floatPoint: true,
+                    range: [0, 14]
+                },
+                district: {
+                    required: true
+                },
+                nitrogen: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                },
+                phosphorus: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                },
+                potassium: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                }
+            },
+            messages: {
+                district: {
+                    required: "Please select a district from the list",
+                }
+            }
+        });
+    })
+</script>
 {% endblock %}

@@ -32,7 +32,7 @@
                 </p>
             {% endif %}
             
-            <form class="row border form-row mb-2 mt-1" method="POST" action="{{ url_for('crop_prediction') }}">
+            <form class="row border form-row mb-2 mt-1" method="POST" action="{{ url_for('crop_prediction') }}" id="recommend">
                 {% if prediction %}
                     <h4 class="text-center pt-4 pb-1">You submitted</h4>
                     <hr style="width: 100px;margin: auto;">
@@ -66,23 +66,23 @@
                     <div class="col-sm-8">
                         <label for="select" class="col-sm-12 col-form-label text-left fs-6 fw-bold">District</label>
                         <select type="text" class="form-control col-sm-12" id="select" name="district">
-                            <option>-- Select District --</option>
-                                <option value="arua" {{ 'selected' if city=='arua' else '' }}>Arua</option>
-                                <option value="bushenyi" {{ 'selected' if city=='bushenyi' else '' }}>Bushenyi</option>
-                                <option value="entebbe" {{ 'selected' if city=='entebbe' else '' }}>Entebbe</option>
-                                <option value="gulu" {{ 'selected' if city=='gulu' else '' }}>Gulu</option>
-                                <option value="jinja" {{ 'selected' if city=='jinja' else '' }}>Jinja</option>
-                                <option value="kabale" {{ 'selected' if city=='kabale' else '' }}>Kabale</option>
-                                <option value="kampala" {{ 'selected' if city=='kampala' else '' }}>Kampala</option>
-                                <option value="kasese" {{ 'selected' if city=='kasese' else '' }}>Kasese</option>
-                                <option value="kotido" {{ 'selected' if city=='kotido' else '' }}>Kotido</option>
-                                <option value="lira" {{ 'selected' if city=='lira' else '' }}>Lira</option>
-                                <option value="masindi" {{ 'selected' if city=='masindi' else '' }}>Masindi</option>
-                                <option value="mbarara" {{ 'selected' if city=='mbarara' else '' }}>Mbarara</option>
-                                <option value="mubende" {{ 'selected' if city=='mubende' else '' }}>Mubende</option>
-                                <option value="serere" {{ 'selected' if city=='serere' else '' }}>Serere</option>
-                                <option value="soroti" {{ 'selected' if city=='soroti' else '' }}>Soroti</option>
-                                <option value="tororo" {{ 'selected' if city=='tororo' else '' }}>Tororo</option>
+                            <option value="">-- Select District --</option>
+                            <option value="arua" {{ 'selected' if city=='arua' else '' }}>Arua</option>
+                            <option value="bushenyi" {{ 'selected' if city=='bushenyi' else '' }}>Bushenyi</option>
+                            <option value="entebbe" {{ 'selected' if city=='entebbe' else '' }}>Entebbe</option>
+                            <option value="gulu" {{ 'selected' if city=='gulu' else '' }}>Gulu</option>
+                            <option value="jinja" {{ 'selected' if city=='jinja' else '' }}>Jinja</option>
+                            <option value="kabale" {{ 'selected' if city=='kabale' else '' }}>Kabale</option>
+                            <option value="kampala" {{ 'selected' if city=='kampala' else '' }}>Kampala</option>
+                            <option value="kasese" {{ 'selected' if city=='kasese' else '' }}>Kasese</option>
+                            <option value="kotido" {{ 'selected' if city=='kotido' else '' }}>Kotido</option>
+                            <option value="lira" {{ 'selected' if city=='lira' else '' }}>Lira</option>
+                            <option value="masindi" {{ 'selected' if city=='masindi' else '' }}>Masindi</option>
+                            <option value="mbarara" {{ 'selected' if city=='mbarara' else '' }}>Mbarara</option>
+                            <option value="mubende" {{ 'selected' if city=='mubende' else '' }}>Mubende</option>
+                            <option value="serere" {{ 'selected' if city=='serere' else '' }}>Serere</option>
+                            <option value="soroti" {{ 'selected' if city=='soroti' else '' }}>Soroti</option>
+                            <option value="tororo" {{ 'selected' if city=='tororo' else '' }}>Tororo</option>
                         </select>
                     </div>
                 </div>
@@ -95,4 +95,47 @@
         </div>
     </div>
 </div>
+{% include 'components/validate-script.html' %}
+
+<script>
+    $(document).ready(() => {
+        // Add method for float points
+        $.validator.addMethod( "floatPoint", function( value, element ) {
+            return this.optional( element ) || /[+-]?((\d+\.?\d*)|(\.\d+))/i.test( value );
+        }, "Please enter a number between 0 - 14" );
+
+        $("#recommend").validate({
+            rules: {
+                ph: {
+                    required: true,
+                    floatPoint: true,
+                    range: [0, 14]
+                },
+                district: {
+                    required: true
+                },
+                nitrogen: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                },
+                phosphorus: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                },
+                potassium: {
+                    required: true,
+                    digits: true,
+                    min: 1
+                }
+            },
+            messages: {
+                district: {
+                    required: "Please select a district from the list",
+                }
+            }
+        });
+    })
+</script>
 {% endblock %}

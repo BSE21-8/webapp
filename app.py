@@ -234,7 +234,7 @@ def ideal_practices():
 @app.route('/practices/<int:id>')
 def show_practices(id):
     # Getting varities for selected crop
-    query = "SELECT crop_practice.id, stage.stage_name, practice.practice_name, crop_practice.practice_description, crop.crop_name "
+    query = "SELECT crop_practice.id, stage.stage_name, stage.stage_description, practice.practice_name, crop_practice.practice_description, crop.crop_name "
     query += "FROM crop_practice LEFT JOIN practice ON crop_practice.practice = practice.id "
     query += "LEFT JOIN stage ON crop_practice.stage = stage.id LEFT JOIN crop ON crop_practice.crop = crop.id "
     query += "WHERE crop_practice.crop = '" + str(id) + "'"

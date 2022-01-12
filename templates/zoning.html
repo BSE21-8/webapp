@@ -26,13 +26,13 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
-                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1">
+                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1" id="regionZone">
                             <div class="form-group justify-content-center row p-3">
                                 <div class="col-sm-8">
                                     <label for="regionSelect"
                                         class="col-sm-12 col-form-label text-left fs-6 fw-bold">Region</label>
                                     <select type="text" class="form-control col-sm-12" name="regionSelect" id="regionSelect">
-                                        <option>--Select Region--</option>
+                                        <option value="">-- Select Region --</option>
                                         {% for key, value in regions.items() %}
                                             <option value="{{ key }}">{{ value }}</option>
                                         {% endfor %}
@@ -47,13 +47,13 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1">
+                        <form method="post" action="{{ url_for('crop_zone_details') }}" class="row border form-row mb-2 mt-1" id="cropZone">
                             <div class="form-group justify-content-center row p-3">
                                 <div class="col-sm-8">
                                     <label for="cropSelect"
                                         class="col-sm-12 col-form-label text-left fs-6 fw-bold">Crop</label>
                                     <select type="text" class="form-control col-sm-12" name="cropSelect" id="cropSelect">
-                                        <option>--Select Crop--</option>
+                                        <option value="">-- Select Crop --</option>
                                         {% for key, value in crops.items() %}
                                             <option value="{{ key }}">{{ value.capitalize() }}</option>
                                         {% endfor %}
@@ -72,9 +72,36 @@
         </div>
     </div>
 </div>
+{% include 'components/validate-script.html' %}
 
 <script>
     $(document).ready(() => {
+        $("#regionZone").validate({
+            rules: {
+                regionSelect: {
+                    required: true,
+                },
+            },
+            messages: {
+                regionSelect: {
+                    required: "Please select a region from the list",
+                }
+            }
+        });
+        
+        $("#cropZone").validate({
+            rules: {
+                cropSelect: {
+                    required: true,
+                },
+            },
+            messages: {
+                cropSelect: {
+                    required: "Please select a crop from the list",
+                }
+            }
+        });
+
         $(".nav-item > button.nav-link").click((e) => {
             $(".nav-item > button.nav-link").not('.active').css("backgroundColor: white")
             if (e.currentTarget.innerText == "Crop"){
