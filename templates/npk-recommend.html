@@ -39,6 +39,10 @@
                         </div>
                     </div>
                 </div>
+            {% elif error %}
+                <p class="text-center bg-danger text-white p-2 wrap">
+                    {{ error }}
+                </p>
             {% else %}
                 <p class="text-center px-2 py-3 wrap note">
                     This will recommend a suitable NPK ratio and pH your soil should have so as to cultivated the desired
@@ -46,7 +50,7 @@
                 </p>
             {% endif %}
 
-            <form method="post" action="{{ url_for('npk_predict') }}" class="row m-0 border form-row m-0 mb-2 mt-1">
+            <form method="post" action="{{ url_for('npk_predict') }}" class="row m-0 border form-row m-0 mb-2 mt-1" id="npkRecommend">
                 {% if crop_name %}
                     <h4 class="text-center pt-4 pb-1">You submitted</h4>
                     <hr style="width: 100px;margin: auto;">
@@ -90,35 +94,15 @@
             return this.optional( element ) || /[+-]?((\d+\.?\d*)|(\.\d+))/i.test( value );
         }, "Please enter a number between 0 - 14" );
 
-        $("#recommend").validate({
+        $("#npkRecommend").validate({
             rules: {
-                ph: {
+                cropname: {
                     required: true,
-                    floatPoint: true,
-                    range: [0, 14]
-                },
-                district: {
-                    required: true
-                },
-                nitrogen: {
-                    required: true,
-                    digits: true,
-                    min: 1
-                },
-                phosphorus: {
-                    required: true,
-                    digits: true,
-                    min: 1
-                },
-                potassium: {
-                    required: true,
-                    digits: true,
-                    min: 1
                 }
             },
             messages: {
                 district: {
-                    required: "Please select a district from the list",
+                    cropname: "Please select a crop from the list",
                 }
             }
         });
