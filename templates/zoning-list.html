@@ -52,6 +52,8 @@
                                     <td>{{ row['yield'] }}</td>
                                     {% if row['crop_extras'] %}
                                         <td>{{ row['crop_extras'] }}</td>
+                                    {% else %}
+                                        <td>-</td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}

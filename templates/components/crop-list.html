@@ -4,7 +4,9 @@
         {% if crops["db_error"] %}
             {% include "components/db-error.html" %}
         {% elif crops|length < 1 %}
-            <p>No crops found</p>
+            <div class="col-md-7">
+                <p class="text-center p-3 border bg-white">No crops found</p>
+            </div>
         {% else %}
             {% for crop in crops %}
             {% set image_path = 'images/'+crop['image'] %}

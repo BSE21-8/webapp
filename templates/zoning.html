@@ -32,6 +32,7 @@
                                     <label for="regionSelect"
                                         class="col-sm-12 col-form-label text-left fs-6 fw-bold">Region</label>
                                     <select type="text" class="form-control col-sm-12" name="regionSelect" id="regionSelect">
+                                        <option>--Select Region--</option>
                                         {% for key, value in regions.items() %}
                                             <option value="{{ key }}">{{ value }}</option>
                                         {% endfor %}
@@ -52,6 +53,7 @@
                                     <label for="cropSelect"
                                         class="col-sm-12 col-form-label text-left fs-6 fw-bold">Crop</label>
                                     <select type="text" class="form-control col-sm-12" name="cropSelect" id="cropSelect">
+                                        <option>--Select Crop--</option>
                                         {% for key, value in crops.items() %}
                                             <option value="{{ key }}">{{ value.capitalize() }}</option>
                                         {% endfor %}
